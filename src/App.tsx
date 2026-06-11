@@ -4,6 +4,7 @@ import {
   EyeOff,
   FilePlus2,
   Filter,
+  MessageCircle,
   Search,
   Shield,
   UserRound
@@ -11,7 +12,7 @@ import {
 import { FormEvent, useMemo, useState } from 'react';
 import { directionLabels, postTypeLabels, seedPosts, seedUsers, statusLabels } from './community/mockData';
 import { buildAnonymousIdentity, findPrivacyRisks } from './community/privacy';
-import { createCommunityPost, filterPosts } from './community/posts';
+import { createCommunityPost, filterPosts, getProfilePosts } from './community/posts';
 import type { CommunityPost, CommunityUser, DraftPostInput, FeedFilters, PostType, TransitionDirection, UserStatus } from './community/types';
 
 const defaultFilters: FeedFilters = {
@@ -36,6 +37,7 @@ export function App() {
   const selectedPost = posts.find((post) => post.id === selectedPostId) ?? filteredPosts[0] ?? posts[0];
   const selectedAuthor = users.find((user) => user.id === selectedPost.authorId) ?? currentUser;
   const profileUser = users.find((user) => user.id === profileUserId) ?? currentUser;
+  const profilePosts = getProfilePosts(posts, profileUser.id);
 
   function updateFilter<Key extends keyof FeedFilters>(key: Key, value: FeedFilters[Key]) {
     setFilters((current) => ({ ...current, [key]: value }));
@@ -204,6 +206,13 @@ export function App() {
         </div>
 
         <div className="feedList">
+          {filteredPosts.length === 0 ? (
+            <div className="emptyState">
+              <MessageCircle aria-hidden="true" />
+              <h3>这排档案柜还是空的</h3>
+              <p>换一个筛选，或者把第一份档案放进来。</p>
+            </div>
+          ) : null}
           {filteredPosts.map((post) => (
             <button
               key={post.id}
@@ -259,6 +268,14 @@ export function App() {
             <li>公司：隐藏</li>
             <li>联系方式：隐藏</li>
           </ul>
+          <div className="profilePosts">
+            <span className="archiveNo">公开档案</span>
+            {profilePosts.map((post) => (
+              <button key={post.id} onClick={() => setSelectedPostId(post.id)}>
+                {post.title}
+              </button>
+            ))}
+          </div>
         </section>
       </aside>
     </main>
