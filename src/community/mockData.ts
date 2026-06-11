@@ -90,7 +90,6 @@ export const seedPosts: CommunityPost[] = [
     tags: ['毕业设计', '公共建筑', '遗物展柜'],
     status: 'left-architecture',
     transitionDirection: 'game-art',
-    graduationYear: 2021,
     coverImage: 'archive-library',
     reactions: { resonance: 203, thanks: 35, saves: 44, asks: 6 },
     commentCount: 27,
