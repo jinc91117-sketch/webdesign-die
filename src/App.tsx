@@ -2,6 +2,7 @@ import {
   Archive,
   BookOpen,
   EyeOff,
+  FilePlus2,
   Filter,
   Search,
   Shield,
@@ -9,9 +10,9 @@ import {
 } from 'lucide-react';
 import { FormEvent, useMemo, useState } from 'react';
 import { directionLabels, postTypeLabels, seedPosts, seedUsers, statusLabels } from './community/mockData';
-import { buildAnonymousIdentity } from './community/privacy';
-import { filterPosts } from './community/posts';
-import type { CommunityPost, CommunityUser, FeedFilters, PostType, TransitionDirection, UserStatus } from './community/types';
+import { buildAnonymousIdentity, findPrivacyRisks } from './community/privacy';
+import { createCommunityPost, filterPosts } from './community/posts';
+import type { CommunityPost, CommunityUser, DraftPostInput, FeedFilters, PostType, TransitionDirection, UserStatus } from './community/types';
 
 const defaultFilters: FeedFilters = {
   type: 'all',
@@ -23,11 +24,13 @@ const defaultFilters: FeedFilters = {
 
 export function App() {
   const [users, setUsers] = useState<CommunityUser[]>(seedUsers);
-  const [posts] = useState<CommunityPost[]>(seedPosts);
+  const [posts, setPosts] = useState<CommunityPost[]>(seedPosts);
   const [currentUser, setCurrentUser] = useState<CommunityUser>(seedUsers[0]);
   const [filters, setFilters] = useState<FeedFilters>(defaultFilters);
   const [selectedPostId, setSelectedPostId] = useState(seedPosts[0].id);
   const [profileUserId, setProfileUserId] = useState(seedUsers[0].id);
+  const [composeBody, setComposeBody] = useState('');
+  const privacyRisks = findPrivacyRisks(composeBody);
 
   const filteredPosts = useMemo(() => filterPosts(posts, filters), [posts, filters]);
   const selectedPost = posts.find((post) => post.id === selectedPostId) ?? filteredPosts[0] ?? posts[0];
@@ -48,6 +51,30 @@ export function App() {
     setUsers((current) => [identity, ...current]);
     setCurrentUser(identity);
     setProfileUserId(identity.id);
+    event.currentTarget.reset();
+  }
+
+  function publishPost(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const type = String(data.get('type') ?? 'help') as PostType;
+    const tags = String(data.get('tags') ?? '')
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+    const input: DraftPostInput = {
+      type,
+      title: String(data.get('title') ?? '').trim() || '未命名档案',
+      body: composeBody.trim() || '这份档案还没有正文。',
+      tags,
+      status: currentUser.status,
+      transitionDirection: currentUser.transitionDirection
+    };
+    const post = createCommunityPost(input, currentUser.id);
+    setPosts((current) => [post, ...current]);
+    setSelectedPostId(post.id);
+    setProfileUserId(currentUser.id);
+    setComposeBody('');
     event.currentTarget.reset();
   }
 
@@ -103,6 +130,40 @@ export function App() {
           <p>匿名档案馆 / 转行避难所</p>
           <h2>保存那些没有建成的东西，也保存离开的路线。</h2>
         </header>
+
+        <form className="composePanel" onSubmit={publishPost}>
+          <div className="panelTitle">
+            <FilePlus2 aria-hidden="true" />
+            <span>新建档案</span>
+          </div>
+          <div className="composeGrid">
+            <label>
+              类型
+              <select name="type" defaultValue="rebirth">
+                {(Object.entries(postTypeLabels) as Array<[PostType, string]>).map(([type, label]) => (
+                  <option key={type} value={type}>{label}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              标签
+              <input name="tags" placeholder="UX, 作品集, 求助" />
+            </label>
+          </div>
+          <label>
+            标题
+            <input name="title" placeholder="给这份档案一个名字" />
+          </label>
+          <label>
+            正文
+            <textarea value={composeBody} onChange={(event) => setComposeBody(event.target.value)} placeholder="写下路线、作品、问题或深夜里的那句话。" />
+          </label>
+          <div className={privacyRisks.length ? 'privacyNotice isWarning' : 'privacyNotice'}>
+            <EyeOff aria-hidden="true" />
+            <span>{privacyRisks.length ? `可能包含：${privacyRisks.join('、')}` : '发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。'}</span>
+          </div>
+          <button type="submit">封存到档案馆</button>
+        </form>
 
         <div className="toolbar">
           <label className="searchInput">
