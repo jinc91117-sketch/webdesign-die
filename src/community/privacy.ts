@@ -7,9 +7,11 @@ const privacyPatterns: Array<[label: string, pattern: RegExp]> = [
 ];
 
 export function buildAnonymousIdentity(codename: string, status: UserStatus): CommunityUser {
+  const normalizedCodename = codename.trim() || 'ANON-0000';
+
   return {
-    id: `local-${codename.trim().toLowerCase().replace(/\s+/g, '-')}`,
-    codename: codename.trim() || 'ANON-0000',
+    id: `local-${normalizedCodename.toLowerCase().replace(/\s+/g, '-')}`,
+    codename: normalizedCodename,
     status,
     privacy: {
       showGraduationYear: false,

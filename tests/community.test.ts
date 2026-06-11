@@ -14,6 +14,13 @@ describe('community privacy helpers', () => {
     });
   });
 
+  it('uses the fallback codename when building ids for blank identities', () => {
+    const identity = buildAnonymousIdentity('   ', 'rebirthing');
+
+    expect(identity.codename).toBe('ANON-0000');
+    expect(identity.id).toBe('local-anon-0000');
+  });
+
   it('flags text that appears to include identifying contact or institution details', () => {
     const risks = findPrivacyRisks('我的学校是某某大学，邮箱是 test@example.com，电话 13800000000');
 
