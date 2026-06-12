@@ -84,7 +84,7 @@ export const seedPosts: CommunityPost[] = [
   {
     id: 'p-002',
     type: 'relic',
-    title: '未建成墓园 03：一个被我画到凌晨四点的图书馆',
+    title: '未建成墓图 03：一个被我画到凌晨四点的图书馆',
     body: '它没有落地，也没有拿奖。但我还是想把它放在这里。模型里那条斜坡，是我当时相信公共空间会改变人的证据。',
     authorId: 'u-section9',
     tags: ['毕业设计', '公共建筑', '遗物展柜'],

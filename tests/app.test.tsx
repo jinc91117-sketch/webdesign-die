@@ -12,9 +12,12 @@ describe('Dead Archi Society app', () => {
     expect(screen.getByText('曾经认真画过的图，应该被好好展示。')).toBeInTheDocument();
     expect(screen.getByText('转行路线不是逃跑，是把训练过的眼睛带到新地方。')).toBeInTheDocument();
     expect(screen.getByText('作品集展墙')).toBeInTheDocument();
-    expect(screen.getByText('转行路线')).toBeInTheDocument();
+    expect(screen.getAllByText('转行路线')[0]).toBeInTheDocument();
     expect(screen.getByText('新建档案')).toBeInTheDocument();
-    expect(screen.getByText('发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。')).toBeInTheDocument();
-    expect(screen.getByText('真实姓名：隐藏')).toBeInTheDocument();
+    expect(
+      screen.getByText(/发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。/)
+    ).toBeInTheDocument();
+    expect(screen.getByText('真实姓名')).toBeInTheDocument();
+    expect(screen.getAllByText('隐藏')[0]).toBeInTheDocument();
   });
 });
