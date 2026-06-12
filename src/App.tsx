@@ -12,7 +12,7 @@ import {
   Sparkles,
   UserRound
 } from 'lucide-react';
-import { FormEvent, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { directionLabels, postTypeLabels, seedPosts, seedUsers, statusLabels } from './community/mockData';
 import { buildAnonymousIdentity, findPrivacyRisks } from './community/privacy';
 import { createCommunityPost, filterPosts, getProfilePosts } from './community/posts';
@@ -34,11 +34,57 @@ const defaultFilters: FeedFilters = {
   query: ''
 };
 
-const showcasePosts = seedPosts.filter((post) => post.type === 'relic' || post.type === 'rebirth').slice(0, 4);
+const storageKeys = {
+  posts: 'dead-archi-posts',
+  legacy: 'dead-archi-legacy-list',
+  stickyNotes: 'dead-archi-sticky-notes'
+} as const;
+
+interface StickyNote {
+  id: string;
+  label: string;
+  body: string;
+}
+
+const seedLegacyPosts = seedPosts.filter((post) => post.type === 'relic' || post.type === 'rebirth').slice(0, 4);
+
+const seedStickyNotes: StickyNote[] = [
+  { id: 'note-grid', label: 'PIN 01', body: '所有底线都对齐，作品才像被正式归档。' },
+  { id: 'note-proof', label: 'PIN 02', body: '刷新以后还存在的，才算真正封存。' }
+];
+
+function readStoredArray<T>(key: string, fallback: T[]): T[] {
+  if (typeof window === 'undefined') {
+    return fallback;
+  }
+
+  try {
+    const stored = window.localStorage.getItem(key);
+    if (!stored) {
+      return fallback;
+    }
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function usePersistentArray<T>(key: string, fallback: T[]) {
+  const [value, setValue] = useState<T[]>(() => readStoredArray(key, fallback));
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue] as const;
+}
 
 export function App() {
   const [users, setUsers] = useState<CommunityUser[]>(seedUsers);
-  const [posts, setPosts] = useState<CommunityPost[]>(seedPosts);
+  const [posts, setPosts] = usePersistentArray<CommunityPost>(storageKeys.posts, seedPosts);
+  const [legacyPosts, setLegacyPosts] = usePersistentArray<CommunityPost>(storageKeys.legacy, seedLegacyPosts);
+  const [stickyNotes, setStickyNotes] = usePersistentArray<StickyNote>(storageKeys.stickyNotes, seedStickyNotes);
   const [currentUser, setCurrentUser] = useState<CommunityUser>(seedUsers[0]);
   const [filters, setFilters] = useState<FeedFilters>(defaultFilters);
   const [selectedPostId, setSelectedPostId] = useState(seedPosts[0].id);
@@ -88,6 +134,17 @@ export function App() {
     };
     const post = createCommunityPost(input, currentUser.id);
     setPosts((current) => [post, ...current]);
+    if (post.type === 'relic' || post.type === 'rebirth') {
+      setLegacyPosts((current) => [post, ...current].slice(0, 8));
+    }
+    setStickyNotes((current) => [
+      {
+        id: `note-${post.id}`,
+        label: `PIN ${String(current.length + 1).padStart(2, '0')}`,
+        body: `${post.mentalDeathMoment ?? '未登记'} / ${post.deathCause ?? '未登记'}`
+      },
+      ...current
+    ].slice(0, 5));
     setSelectedPostId(post.id);
     setProfileUserId(currentUser.id);
     setComposeBody('');
@@ -121,6 +178,7 @@ export function App() {
       <section className="heroGrid" id="top" aria-label="建筑作品集式首页">
         <div className="heroCopy">
           <p className="eyebrow">ARCHITECTURE AFTER BURNOUT</p>
+          <span className="heroLatin">DEAD ARCHI GRADUATES</span>
           <h1>死去的建筑毕业生</h1>
           <p className="heroKicker">作品集展厅 / 精神墓园 / 转行希望站</p>
           <p className="heroText">不是生理意义上的死亡，是某一刻你发现自己再也画不动那根线。</p>
@@ -217,23 +275,29 @@ export function App() {
             </div>
 
             <div className="showcaseGrid">
-              {showcasePosts.map((post, index) => (
-                <button
-                  className="projectCard"
-                  key={post.id}
-                  onClick={() => {
-                    setSelectedPostId(post.id);
-                    setProfileUserId(post.authorId);
-                  }}
-                >
-                  <PortfolioVisual index={index} />
-                  <div>
-                    <strong>{post.title}</strong>
-                    <span>0{index + 1}</span>
-                  </div>
-                  <small>{post.tags.join(' / ')}</small>
-                </button>
-              ))}
+              {legacyPosts.slice(0, 4).map((post, index) => {
+                const author = users.find((user) => user.id === post.authorId);
+                return (
+                  <button
+                    className="projectCard"
+                    key={post.id}
+                    onClick={() => {
+                      setSelectedPostId(post.id);
+                      setProfileUserId(post.authorId);
+                    }}
+                  >
+                    <PortfolioVisual index={index} />
+                    <div className="plateBody">
+                      <strong>{post.title}</strong>
+                      <small>{post.tags.join(' / ')}</small>
+                    </div>
+                    <div className="plateFooter">
+                      <span>PLATE {String(index + 1).padStart(2, '0')}</span>
+                      <span>BY: {author?.codename ?? 'ANON'}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </section>
 
@@ -445,6 +509,16 @@ export function App() {
                 </p>
                 <button type="submit">封存精神墓志铭</button>
               </form>
+
+              <section className="stickyBoard" aria-label="封存纸条">
+                <p className="eyebrow">Pinned Notes</p>
+                {stickyNotes.map((note) => (
+                  <article key={note.id}>
+                    <span>{note.label}</span>
+                    <p>{note.body}</p>
+                  </article>
+                ))}
+              </section>
             </aside>
           </section>
         </section>
