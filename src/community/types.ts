@@ -58,6 +58,8 @@ export interface CommunityPost {
   type: PostType;
   title: string;
   body: string;
+  deathCause?: string;
+  mentalDeathMoment?: string;
   authorId: string;
   tags: string[];
   status: UserStatus;
@@ -84,6 +86,8 @@ export interface DraftPostInput {
   type: PostType;
   title: string;
   body: string;
+  deathCause?: string;
+  mentalDeathMoment?: string;
   tags: string[];
   status: UserStatus;
   transitionDirection?: TransitionDirection;
