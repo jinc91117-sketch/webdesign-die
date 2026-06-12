@@ -215,101 +215,91 @@ label {
   min-height: 620px;
   overflow: hidden;
   border-left: 1px solid #d7d2c7;
-  background:
-    radial-gradient(circle at 52% 35%, rgba(244, 242, 236, .38), transparent 28%),
-    linear-gradient(145deg, rgba(22, 22, 19, .06), rgba(22, 22, 19, .28)),
-    #aaa79d;
+  background: #d8d4ca;
 }
 
 .heroImage::before {
   position: absolute;
   inset: 0;
+  z-index: 2;
   content: "";
   background:
-    linear-gradient(90deg, transparent 0 53%, rgba(255, 255, 255, .32) 53% 54%, transparent 54%),
-    linear-gradient(rgba(255, 255, 255, .26) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 42px;
-  mix-blend-mode: soft-light;
+    linear-gradient(90deg, rgba(248, 247, 242, .78) 0 28%, rgba(248, 247, 242, .32) 45%, rgba(22, 22, 19, .10) 100%),
+    linear-gradient(rgba(255, 255, 255, .18) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 44px;
+  pointer-events: none;
 }
 
-.concreteMass {
+.heroImage::after {
   position: absolute;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, .26), transparent 40%),
-    #c7c1b5;
-  box-shadow: 0 30px 80px rgba(22, 22, 19, .28);
-}
-
-.massA {
-  right: 0;
-  top: 108px;
-  width: 66%;
-  height: 112px;
-}
-
-.massB {
-  right: 0;
-  top: 220px;
-  width: 88%;
-  height: 170px;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, .18), transparent 36%),
-    #b2aea5;
-}
-
-.deadTree {
-  position: absolute;
-  left: 35%;
-  bottom: 118px;
-  width: 2px;
-  height: 210px;
-  background: #3a332b;
-  transform: rotate(7deg);
-}
-
-.deadTree::before,
-.deadTree::after {
-  position: absolute;
+  inset: 0;
+  z-index: 3;
   content: "";
-  background: #3a332b;
-  transform-origin: bottom left;
-}
-
-.deadTree::before {
-  left: 0;
-  top: 22px;
-  width: 2px;
-  height: 128px;
-  transform: rotate(-54deg);
-}
-
-.deadTree::after {
-  left: 0;
-  top: 54px;
-  width: 2px;
-  height: 104px;
-  transform: rotate(48deg);
-}
-
-.waterline {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 128px;
   background:
-    repeating-linear-gradient(0deg, rgba(22, 22, 19, .18) 0 1px, transparent 1px 14px),
-    rgba(66, 61, 54, .35);
+    radial-gradient(circle at 18% 28%, rgba(22, 22, 19, .14) 0 1px, transparent 2px),
+    radial-gradient(circle at 28% 86%, rgba(22, 22, 19, .12) 0 1px, transparent 2px),
+    linear-gradient(90deg, transparent 0 25%, rgba(22, 22, 19, .18) 25% 25.1%, transparent 25.1%),
+    linear-gradient(0deg, transparent 0 70%, rgba(22, 22, 19, .14) 70% 70.1%, transparent 70.1%);
+  opacity: .58;
+  pointer-events: none;
+}
+
+.heroImage img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(.68) contrast(.94) brightness(1.04);
+}
+
+.paperVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(248, 247, 242, .92) 0 18%, rgba(248, 247, 242, .52) 34%, transparent 58%),
+    linear-gradient(180deg, rgba(248, 247, 242, .20), rgba(22, 22, 19, .18));
+  pointer-events: none;
 }
 
 .planOverlay {
   position: absolute;
-  right: 9%;
-  bottom: 64px;
-  width: 260px;
-  height: 138px;
-  border: 1px solid rgba(255, 255, 255, .48);
+  left: 12%;
+  bottom: 72px;
+  z-index: 4;
+  width: 420px;
+  height: 210px;
+  border: 1px solid rgba(255, 255, 255, .72);
+  background:
+    linear-gradient(rgba(255, 255, 255, .55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .55) 1px, transparent 1px);
+  background-size: 42px 42px;
   opacity: .78;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.planOverlay::before,
+.planOverlay::after {
+  position: absolute;
+  content: "";
+  border: 1px solid rgba(22, 22, 19, .34);
+}
+
+.planOverlay::before {
+  left: 28%;
+  top: -26px;
+  width: 96px;
+  height: 260px;
+}
+
+.planOverlay::after {
+  left: 12%;
+  bottom: -22px;
+  width: 190px;
+  height: 74px;
 }
 
 .selectedStrip {

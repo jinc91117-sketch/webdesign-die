@@ -8,6 +8,10 @@ describe('Dead Archi Society app', () => {
     render(<App />);
 
     expect(screen.getByRole('heading', { level: 1, name: '死去的建筑毕业生' })).toBeInTheDocument();
+    expect(screen.getByAltText('凋零的混凝土建筑与图纸底图')).toHaveAttribute(
+      'src',
+      '/hero-architecture-memorial.png'
+    );
     expect(screen.getByText('ARCHITECTURE AFTER BURNOUT')).toBeInTheDocument();
     expect(screen.getByText('作品集展厅 / 精神墓园 / 转行希望站')).toBeInTheDocument();
     expect(screen.getByText('不是生理意义上的死亡，是某一刻你发现自己再也画不动那根线。')).toBeInTheDocument();

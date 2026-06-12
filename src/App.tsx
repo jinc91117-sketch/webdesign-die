@@ -136,11 +136,9 @@ export function App() {
           </div>
         </div>
 
-        <div className="heroImage" aria-hidden="true">
-          <div className="concreteMass massA" />
-          <div className="concreteMass massB" />
-          <div className="deadTree" />
-          <div className="waterline" />
+        <div className="heroImage">
+          <img src="/hero-architecture-memorial.png" alt="凋零的混凝土建筑与图纸底图" />
+          <div className="paperVeil" aria-hidden="true" />
           <div className="planOverlay" />
         </div>
       </section>
