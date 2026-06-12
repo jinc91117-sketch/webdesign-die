@@ -1,12 +1,15 @@
 import {
-  Archive,
+  ArrowUpRight,
   BookOpen,
   EyeOff,
   FilePlus2,
   Filter,
+  GalleryHorizontalEnd,
   MessageCircle,
+  Route,
   Search,
   Shield,
+  Sparkles,
   UserRound
 } from 'lucide-react';
 import { FormEvent, useMemo, useState } from 'react';
@@ -30,6 +33,8 @@ const defaultFilters: FeedFilters = {
   sort: 'latest',
   query: ''
 };
+
+const portfolioPosts = seedPosts.filter((post) => post.type === 'relic' || post.type === 'rebirth').slice(0, 3);
 
 export function App() {
   const [users, setUsers] = useState<CommunityUser[]>(seedUsers);
@@ -89,15 +94,12 @@ export function App() {
   }
 
   return (
-    <main className="archiveShell">
-      <aside className="leftRail" aria-label="社区导航">
+    <main className="studioShell">
+      <aside className="sidePanel" aria-label="社区导航">
         <div className="brandBlock">
-          <Archive aria-hidden="true" />
-          <div>
-            <p className="archiveNo">ARCHIVE DAS-000</p>
-            <h1>死去的建筑毕业生</h1>
-            <span>Dead Archi Society</span>
-          </div>
+          <p className="archiveNo">PORTFOLIO AFTERLIFE</p>
+          <h1>死去的建筑毕业生</h1>
+          <span>Dead Archi Society</span>
         </div>
 
         <nav className="sectionNav" aria-label="档案分区">
@@ -139,188 +141,251 @@ export function App() {
         </form>
       </aside>
 
-      <section className="feedColumn" aria-label="档案大厅">
-        <header className="heroBand">
-          <p>匿名档案馆 / 转行避难所</p>
-          <h2>保存那些没有建成的东西，也保存离开的路线。</h2>
+      <section className="mainStage" aria-label="作品集展厅">
+        <header className="portfolioHero">
+          <div className="heroCopy">
+            <p className="eyebrow">作品集展厅 / 转行希望站</p>
+            <h2>曾经认真画过的图，应该被好好展示。</h2>
+            <p className="heroText">这里保留毕业设计、竞赛图纸、模型和那些没有建成的方案，也把离开建筑之后的新路径摊开给后来的人看。</p>
+            <div className="heroActions">
+              <a href="#portfolio-wall">
+                <GalleryHorizontalEnd aria-hidden="true" />
+                看作品集展墙
+              </a>
+              <a href="#transition-paths">
+                <Route aria-hidden="true" />
+                看转行路线
+              </a>
+            </div>
+          </div>
+
+          <div className="portfolioSpread" aria-label="作品集样张">
+            {portfolioPosts.map((post, index) => (
+              <button
+                className="portfolioPlate"
+                key={post.id}
+                onClick={() => {
+                  setSelectedPostId(post.id);
+                  setProfileUserId(post.authorId);
+                }}
+              >
+                <span>0{index + 1}</span>
+                <PortfolioVisual index={index} />
+                <strong>{post.title}</strong>
+                <small>{post.tags.join(' / ')}</small>
+              </button>
+            ))}
+          </div>
         </header>
 
-        <form className="composePanel" onSubmit={publishPost}>
-          <div className="panelTitle">
-            <FilePlus2 aria-hidden="true" />
-            <span>新建档案</span>
+        <section className="hopeBand" id="transition-paths" aria-label="转行路线">
+          <div>
+            <p className="eyebrow">转行路线</p>
+            <h3>转行路线不是逃跑，是把训练过的眼睛带到新地方。</h3>
           </div>
-          <div className="composeGrid">
-            <label>
-              类型
-              <select name="type" defaultValue="rebirth">
-                {(Object.entries(postTypeLabels) as Array<[PostType, string]>).map(([type, label]) => (
-                  <option key={type} value={type}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              标签
-              <input name="tags" placeholder="UX, 作品集, 求助" />
-            </label>
-          </div>
-          <label>
-            标题
-            <input name="title" placeholder="给这份档案一个名字" />
-          </label>
-          <label>
-            正文
-            <textarea
-              value={composeBody}
-              onChange={(event) => setComposeBody(event.target.value)}
-              placeholder="写下路线、作品、问题或深夜里的那句话。"
-            />
-          </label>
-          <div className={privacyRisks.length ? 'privacyNotice isWarning' : 'privacyNotice'}>
-            <EyeOff aria-hidden="true" />
-            <span>
-              {privacyRisks.length
-                ? `可能包含：${privacyRisks.join('、')}`
-                : '发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。'}
-            </span>
-          </div>
-          <button type="submit">封存到档案馆</button>
-        </form>
-
-        <div className="toolbar">
-          <label className="searchInput">
-            <Search aria-hidden="true" />
-            <input
-              value={filters.query}
-              onChange={(event) => updateFilter('query', event.target.value)}
-              placeholder="搜索转行、作品集、深夜求助"
-            />
-          </label>
-          <label>
-            <Filter aria-hidden="true" />
-            <select
-              value={filters.status}
-              onChange={(event) => updateFilter('status', event.target.value as FeedFilters['status'])}
-            >
-              <option value="all">全部状态</option>
-              {(Object.entries(statusLabels) as Array<[UserStatus, string]>).map(([status, label]) => (
-                <option key={status} value={status}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            方向
-            <select
-              value={filters.direction}
-              onChange={(event) => updateFilter('direction', event.target.value as FeedFilters['direction'])}
-            >
-              <option value="all">全部方向</option>
-              {(Object.entries(directionLabels) as Array<[TransitionDirection, string]>).map(([direction, label]) => (
-                <option key={direction} value={direction}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            排序
-            <select
-              value={filters.sort}
-              onChange={(event) => updateFilter('sort', event.target.value as FeedFilters['sort'])}
-            >
-              <option value="latest">最新</option>
-              <option value="resonance">最多共鸣</option>
-              <option value="discussion">最多讨论</option>
-              <option value="useful">最有用</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="feedList">
-          {filteredPosts.length === 0 ? (
-            <div className="emptyState">
-              <MessageCircle aria-hidden="true" />
-              <h3>这排档案柜还是空的</h3>
-              <p>换一个筛选，或者把第一份档案放进来。</p>
-            </div>
-          ) : null}
-          {filteredPosts.map((post) => (
-            <button
-              key={post.id}
-              className={`archiveCard ${selectedPost.id === post.id ? 'isSelected' : ''}`}
-              onClick={() => {
-                setSelectedPostId(post.id);
-                setProfileUserId(post.authorId);
-              }}
-            >
-              <span className="archiveNo">
-                {postTypeLabels[post.type]} · {post.id.toUpperCase()}
-              </span>
-              <h3>{post.title}</h3>
-              <p>{post.body}</p>
-              <div className="tagRow">
-                {post.tags.map((tag) => (
-                  <span key={tag}>{tag}</span>
-                ))}
-              </div>
-              <footer>
-                <span>{statusLabels[post.status]}</span>
-                <span>{post.reactions.resonance} 共鸣</span>
-                <span>{post.commentCount} 追问</span>
-              </footer>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <aside className="detailColumn" aria-label="详情和个人页">
-        <article className="detailPanel">
-          <p className="archiveNo">
-            {postTypeLabels[selectedPost.type]} · {selectedPost.id.toUpperCase()}
-          </p>
-          <h2>{selectedPost.title}</h2>
-          <button className="authorButton" onClick={() => setProfileUserId(selectedAuthor.id)}>
-            <UserRound aria-hidden="true" />
-            {selectedAuthor.codename}
-          </button>
-          <p>{selectedPost.body}</p>
-          <div className="reactionGrid">
-            <span>共鸣 {selectedPost.reactions.resonance}</span>
-            <span>感谢 {selectedPost.reactions.thanks}</span>
-            <span>收藏 {selectedPost.reactions.saves}</span>
-            <span>追问 {selectedPost.reactions.asks}</span>
-          </div>
-        </article>
-
-        <section className="profilePanel">
-          <div className="panelTitle">
-            <EyeOff aria-hidden="true" />
-            <span>迁徙档案</span>
-          </div>
-          <h3>{profileUser.codename}</h3>
-          <p>{statusLabels[profileUser.status]}</p>
-          {profileUser.transitionDirection ? <p>方向：{directionLabels[profileUser.transitionDirection]}</p> : null}
-          {profileUser.publicBio ? <p>{profileUser.publicBio}</p> : null}
-          <ul>
-            <li>真实姓名：隐藏</li>
-            <li>学校：隐藏</li>
-            <li>公司：隐藏</li>
-            <li>联系方式：隐藏</li>
-          </ul>
-          <div className="profilePosts">
-            <span className="archiveNo">公开档案</span>
-            {profilePosts.map((post) => (
-              <button key={post.id} onClick={() => setSelectedPostId(post.id)}>
-                {post.title}
+          <div className="pathGrid">
+            {(['ux', 'product', 'game-art', 'development'] as TransitionDirection[]).map((direction) => (
+              <button key={direction} onClick={() => updateFilter('direction', direction)}>
+                <Sparkles aria-hidden="true" />
+                <span>{directionLabels[direction]}</span>
+                <ArrowUpRight aria-hidden="true" />
               </button>
             ))}
           </div>
         </section>
-      </aside>
+
+        <section className="contentColumns">
+          <div className="galleryColumn" id="portfolio-wall">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Portfolio Wall</p>
+                <h3>作品集展墙</h3>
+              </div>
+              <span>把遗憾当作作品保存，而不是删掉。</span>
+            </div>
+
+            <div className="toolbar">
+              <label className="searchInput">
+                <Search aria-hidden="true" />
+                <input
+                  value={filters.query}
+                  onChange={(event) => updateFilter('query', event.target.value)}
+                  placeholder="搜索转行、作品集、深夜求助"
+                />
+              </label>
+              <label>
+                <Filter aria-hidden="true" />
+                <select
+                  value={filters.status}
+                  onChange={(event) => updateFilter('status', event.target.value as FeedFilters['status'])}
+                >
+                  <option value="all">全部状态</option>
+                  {(Object.entries(statusLabels) as Array<[UserStatus, string]>).map(([status, label]) => (
+                    <option key={status} value={status}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                方向
+                <select
+                  value={filters.direction}
+                  onChange={(event) => updateFilter('direction', event.target.value as FeedFilters['direction'])}
+                >
+                  <option value="all">全部方向</option>
+                  {(Object.entries(directionLabels) as Array<[TransitionDirection, string]>).map(([direction, label]) => (
+                    <option key={direction} value={direction}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                排序
+                <select
+                  value={filters.sort}
+                  onChange={(event) => updateFilter('sort', event.target.value as FeedFilters['sort'])}
+                >
+                  <option value="latest">最新</option>
+                  <option value="resonance">最多共鸣</option>
+                  <option value="discussion">最多讨论</option>
+                  <option value="useful">最有用</option>
+                </select>
+              </label>
+            </div>
+
+            <div className="feedList">
+              {filteredPosts.length === 0 ? (
+                <div className="emptyState">
+                  <MessageCircle aria-hidden="true" />
+                  <h3>这排档案柜还是空的</h3>
+                  <p>换一个筛选，或者把第一份档案放进来。</p>
+                </div>
+              ) : null}
+              {filteredPosts.map((post, index) => (
+                <button
+                  key={post.id}
+                  className={`archiveCard ${selectedPost.id === post.id ? 'isSelected' : ''}`}
+                  onClick={() => {
+                    setSelectedPostId(post.id);
+                    setProfileUserId(post.authorId);
+                  }}
+                >
+                  <PortfolioVisual index={index} />
+                  <span className="archiveNo">
+                    {postTypeLabels[post.type]} · {post.id.toUpperCase()}
+                  </span>
+                  <h4>{post.title}</h4>
+                  <p>{post.body}</p>
+                  <div className="tagRow">
+                    {post.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <aside className="storyColumn" aria-label="详情和个人页">
+            <article className="detailPanel">
+              <p className="archiveNo">
+                {postTypeLabels[selectedPost.type]} · {selectedPost.id.toUpperCase()}
+              </p>
+              <h3>{selectedPost.title}</h3>
+              <button className="authorButton" onClick={() => setProfileUserId(selectedAuthor.id)}>
+                <UserRound aria-hidden="true" />
+                {selectedAuthor.codename}
+              </button>
+              <p>{selectedPost.body}</p>
+              <div className="reactionGrid">
+                <span>共鸣 {selectedPost.reactions.resonance}</span>
+                <span>感谢 {selectedPost.reactions.thanks}</span>
+                <span>收藏 {selectedPost.reactions.saves}</span>
+                <span>追问 {selectedPost.reactions.asks}</span>
+              </div>
+            </article>
+
+            <section className="profilePanel">
+              <div className="panelTitle">
+                <EyeOff aria-hidden="true" />
+                <span>迁徙档案</span>
+              </div>
+              <h3>{profileUser.codename}</h3>
+              <p>{statusLabels[profileUser.status]}</p>
+              {profileUser.transitionDirection ? <p>方向：{directionLabels[profileUser.transitionDirection]}</p> : null}
+              {profileUser.publicBio ? <p>{profileUser.publicBio}</p> : null}
+              <ul>
+                <li>真实姓名：隐藏</li>
+                <li>学校：隐藏</li>
+                <li>公司：隐藏</li>
+                <li>联系方式：隐藏</li>
+              </ul>
+              <div className="profilePosts">
+                <span className="archiveNo">公开档案</span>
+                {profilePosts.map((post) => (
+                  <button key={post.id} onClick={() => setSelectedPostId(post.id)}>
+                    {post.title}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <form className="composePanel" onSubmit={publishPost}>
+              <div className="panelTitle">
+                <FilePlus2 aria-hidden="true" />
+                <span>新建档案</span>
+              </div>
+              <label>
+                类型
+                <select name="type" defaultValue="relic">
+                  {(Object.entries(postTypeLabels) as Array<[PostType, string]>).map(([type, label]) => (
+                    <option key={type} value={type}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                标题
+                <input name="title" placeholder="给这份档案一个名字" />
+              </label>
+              <label>
+                标签
+                <input name="tags" placeholder="UX, 作品集, 求助" />
+              </label>
+              <label>
+                正文
+                <textarea
+                  value={composeBody}
+                  onChange={(event) => setComposeBody(event.target.value)}
+                  placeholder="写下路线、作品、问题或深夜里的那句话。"
+                />
+              </label>
+              <div className={privacyRisks.length ? 'privacyNotice isWarning' : 'privacyNotice'}>
+                <EyeOff aria-hidden="true" />
+                <span>
+                  {privacyRisks.length
+                    ? `可能包含：${privacyRisks.join('、')}`
+                    : '发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。'}
+                </span>
+              </div>
+              <button type="submit">封存到档案馆</button>
+            </form>
+          </aside>
+        </section>
+      </section>
     </main>
+  );
+}
+
+function PortfolioVisual({ index }: { index: number }) {
+  return (
+    <div className={`portfolioVisual visual${index % 3}`} aria-hidden="true">
+      <span />
+      <span />
+      <span />
+    </div>
   );
 }
