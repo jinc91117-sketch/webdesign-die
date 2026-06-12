@@ -3,3 +3,15 @@ dist/
 *.tsbuildinfo
 .DS_Store
 *.log
+
+# Local agent/tooling state
+.agents/
+.codex/
+skills-lock.json
+
+# Local modeling/prototype scratch files
+blender_mcp_addon.py
+create_pokeball_blender.py
+sketchup_house_model.rb
+blender_script_backups/
+projects/
