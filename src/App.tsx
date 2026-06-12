@@ -13,7 +13,15 @@ import { FormEvent, useMemo, useState } from 'react';
 import { directionLabels, postTypeLabels, seedPosts, seedUsers, statusLabels } from './community/mockData';
 import { buildAnonymousIdentity, findPrivacyRisks } from './community/privacy';
 import { createCommunityPost, filterPosts, getProfilePosts } from './community/posts';
-import type { CommunityPost, CommunityUser, DraftPostInput, FeedFilters, PostType, TransitionDirection, UserStatus } from './community/types';
+import type {
+  CommunityPost,
+  CommunityUser,
+  DraftPostInput,
+  FeedFilters,
+  PostType,
+  TransitionDirection,
+  UserStatus
+} from './community/types';
 
 const defaultFilters: FeedFilters = {
   type: 'all',
@@ -110,7 +118,9 @@ export function App() {
             <Shield aria-hidden="true" />
             <span>匿名身份</span>
           </div>
-          <p>当前：{currentUser.codename} · {statusLabels[currentUser.status]}</p>
+          <p>
+            当前：{currentUser.codename} · {statusLabels[currentUser.status]}
+          </p>
           <label>
             代号
             <input name="codename" placeholder="A-0427" />
@@ -119,7 +129,9 @@ export function App() {
             状态
             <select name="status" defaultValue="rebirthing">
               {(Object.entries(statusLabels) as Array<[UserStatus, string]>).map(([status, label]) => (
-                <option key={status} value={status}>{label}</option>
+                <option key={status} value={status}>
+                  {label}
+                </option>
               ))}
             </select>
           </label>
@@ -143,7 +155,9 @@ export function App() {
               类型
               <select name="type" defaultValue="rebirth">
                 {(Object.entries(postTypeLabels) as Array<[PostType, string]>).map(([type, label]) => (
-                  <option key={type} value={type}>{label}</option>
+                  <option key={type} value={type}>
+                    {label}
+                  </option>
                 ))}
               </select>
             </label>
@@ -158,11 +172,19 @@ export function App() {
           </label>
           <label>
             正文
-            <textarea value={composeBody} onChange={(event) => setComposeBody(event.target.value)} placeholder="写下路线、作品、问题或深夜里的那句话。" />
+            <textarea
+              value={composeBody}
+              onChange={(event) => setComposeBody(event.target.value)}
+              placeholder="写下路线、作品、问题或深夜里的那句话。"
+            />
           </label>
           <div className={privacyRisks.length ? 'privacyNotice isWarning' : 'privacyNotice'}>
             <EyeOff aria-hidden="true" />
-            <span>{privacyRisks.length ? `可能包含：${privacyRisks.join('、')}` : '发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。'}</span>
+            <span>
+              {privacyRisks.length
+                ? `可能包含：${privacyRisks.join('、')}`
+                : '发布前请检查作品图、PDF、截图里是否包含真实姓名、学校、公司、电话、邮箱或二维码。'}
+            </span>
           </div>
           <button type="submit">封存到档案馆</button>
         </form>
@@ -178,25 +200,38 @@ export function App() {
           </label>
           <label>
             <Filter aria-hidden="true" />
-            <select value={filters.status} onChange={(event) => updateFilter('status', event.target.value as FeedFilters['status'])}>
+            <select
+              value={filters.status}
+              onChange={(event) => updateFilter('status', event.target.value as FeedFilters['status'])}
+            >
               <option value="all">全部状态</option>
               {(Object.entries(statusLabels) as Array<[UserStatus, string]>).map(([status, label]) => (
-                <option key={status} value={status}>{label}</option>
+                <option key={status} value={status}>
+                  {label}
+                </option>
               ))}
             </select>
           </label>
           <label>
             方向
-            <select value={filters.direction} onChange={(event) => updateFilter('direction', event.target.value as FeedFilters['direction'])}>
+            <select
+              value={filters.direction}
+              onChange={(event) => updateFilter('direction', event.target.value as FeedFilters['direction'])}
+            >
               <option value="all">全部方向</option>
               {(Object.entries(directionLabels) as Array<[TransitionDirection, string]>).map(([direction, label]) => (
-                <option key={direction} value={direction}>{label}</option>
+                <option key={direction} value={direction}>
+                  {label}
+                </option>
               ))}
             </select>
           </label>
           <label>
             排序
-            <select value={filters.sort} onChange={(event) => updateFilter('sort', event.target.value as FeedFilters['sort'])}>
+            <select
+              value={filters.sort}
+              onChange={(event) => updateFilter('sort', event.target.value as FeedFilters['sort'])}
+            >
               <option value="latest">最新</option>
               <option value="resonance">最多共鸣</option>
               <option value="discussion">最多讨论</option>
@@ -222,10 +257,16 @@ export function App() {
                 setProfileUserId(post.authorId);
               }}
             >
-              <span className="archiveNo">{postTypeLabels[post.type]} · {post.id.toUpperCase()}</span>
+              <span className="archiveNo">
+                {postTypeLabels[post.type]} · {post.id.toUpperCase()}
+              </span>
               <h3>{post.title}</h3>
               <p>{post.body}</p>
-              <div className="tagRow">{post.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+              <div className="tagRow">
+                {post.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
               <footer>
                 <span>{statusLabels[post.status]}</span>
                 <span>{post.reactions.resonance} 共鸣</span>
@@ -238,7 +279,9 @@ export function App() {
 
       <aside className="detailColumn" aria-label="详情和个人页">
         <article className="detailPanel">
-          <p className="archiveNo">{postTypeLabels[selectedPost.type]} · {selectedPost.id.toUpperCase()}</p>
+          <p className="archiveNo">
+            {postTypeLabels[selectedPost.type]} · {selectedPost.id.toUpperCase()}
+          </p>
           <h2>{selectedPost.title}</h2>
           <button className="authorButton" onClick={() => setProfileUserId(selectedAuthor.id)}>
             <UserRound aria-hidden="true" />
