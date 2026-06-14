@@ -1214,3 +1214,558 @@ dd {
     font-size: 42px;
   }
 }
+
+/* Dead Archi Society dark memorial direction */
+:root {
+  color: #e9ece8;
+  background: #050505;
+  --ink: #f3f5f1;
+  --muted: #8f968f;
+  --line: rgba(226, 232, 223, .16);
+  --line-strong: #f3f5f1;
+  --paper: #0d0e0d;
+  --paper-soft: #141514;
+  --graphite: #a9b0aa;
+  --accent: #c7ff38;
+  --danger: #ff3b54;
+  --concrete: #6f7470;
+  font-family:
+    "Helvetica Neue", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 78% 8%, rgba(199, 255, 56, .08), transparent 24%),
+    radial-gradient(circle at 14% 82%, rgba(255, 59, 84, .07), transparent 26%),
+    linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px),
+    #050505;
+  background-size: auto, auto, 56px 56px, 56px 56px, auto;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, .04), transparent 18%, rgba(255, 255, 255, .025) 42%, transparent 72%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .018) 0 1px, transparent 1px 9px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.siteShell {
+  background: rgba(5, 5, 5, .78);
+  border-left-color: var(--line);
+}
+
+.topBar {
+  min-height: 78px;
+  border-bottom-color: var(--line);
+  background: rgba(5, 5, 5, .78);
+  backdrop-filter: blur(22px) saturate(120%);
+}
+
+.wordmark {
+  border-right-color: var(--line);
+}
+
+.wordmark strong,
+.heroLatin,
+.heroCopy h1,
+.brandBlock h2,
+.sectionHeader h2,
+.approachIntro h2,
+.detailPanel h2,
+.profilePanel h2 {
+  font-family:
+    "Helvetica Neue", "Arial Narrow", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+
+.wordmark strong {
+  color: var(--ink);
+  letter-spacing: .44em;
+}
+
+.wordmark span,
+.topBar nav a,
+.language,
+.eyebrow,
+.archiveNo,
+.selectedStrip span,
+.projectCard small,
+.cardMeta,
+.deathReport span,
+dt,
+label {
+  color: var(--muted);
+}
+
+.topBar nav a::after {
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(199, 255, 56, .42);
+}
+
+.topBar nav a:hover,
+.sectionNav button.isActive,
+.sectionNav button:hover,
+.selectedInfo button:hover,
+.authorButton:hover,
+.profileWorks button:hover {
+  color: var(--accent);
+}
+
+.verticalRail,
+.sidePanel {
+  background: rgba(8, 9, 8, .82);
+  border-color: var(--line);
+}
+
+.verticalRail {
+  color: rgba(233, 236, 232, .52);
+}
+
+.heroGrid,
+.selectedStrip,
+.showcaseSection,
+.approachBand,
+.contentColumns {
+  border-bottom-color: var(--line);
+}
+
+.heroCopy {
+  background:
+    linear-gradient(135deg, transparent 0 62%, rgba(199, 255, 56, .12) 62% 62.25%, transparent 62.25%),
+    linear-gradient(90deg, rgba(255, 255, 255, .045), transparent 42%),
+    #050505;
+}
+
+.heroLatin {
+  max-width: 660px;
+  color: var(--ink);
+  font-size: clamp(54px, 6vw, 110px);
+  line-height: .84;
+  text-transform: uppercase;
+}
+
+.heroCopy h1 {
+  color: rgba(233, 236, 232, .92);
+  font-size: clamp(44px, 5.2vw, 88px);
+}
+
+.heroKicker {
+  border-top-color: var(--accent);
+  color: #d7ddd5;
+}
+
+.heroText,
+.brandBlock span,
+.sectionHeader span,
+.archiveCard p,
+.detailPanel p,
+.profilePanel p,
+.privacyWarning {
+  color: #b6bdb5;
+}
+
+.heroActions a,
+.identityCard button,
+.composePanel button {
+  border-color: rgba(199, 255, 56, .72);
+  background: var(--accent);
+  color: #060606;
+  box-shadow: 0 0 0 rgba(199, 255, 56, 0);
+}
+
+.heroActions a:last-child {
+  border-color: rgba(233, 236, 232, .28);
+  background: transparent;
+  color: var(--ink);
+}
+
+.heroActions a:hover,
+.identityCard button:hover,
+.composePanel button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 26px rgba(199, 255, 56, .22);
+}
+
+.heroActions a:last-child:hover {
+  background: rgba(199, 255, 56, .10);
+  color: var(--accent);
+}
+
+.heroImage {
+  border-left-color: var(--line);
+  background: #0b0c0b;
+}
+
+.heroImage img {
+  filter: grayscale(.82) saturate(.36) contrast(1.16) brightness(.48);
+  transform: scale(1.02);
+}
+
+.heroImage::before {
+  background:
+    linear-gradient(90deg, rgba(5, 5, 5, .92) 0 19%, rgba(5, 5, 5, .52) 40%, rgba(5, 5, 5, .16) 100%),
+    linear-gradient(rgba(199, 255, 56, .12) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 44px;
+}
+
+.heroImage::after {
+  background:
+    radial-gradient(circle at 18% 28%, rgba(199, 255, 56, .55) 0 1px, transparent 2px),
+    radial-gradient(circle at 28% 86%, rgba(255, 59, 84, .42) 0 1px, transparent 2px),
+    linear-gradient(90deg, transparent 0 25%, rgba(199, 255, 56, .22) 25% 25.1%, transparent 25.1%),
+    linear-gradient(0deg, transparent 0 70%, rgba(255, 255, 255, .18) 70% 70.1%, transparent 70.1%);
+  opacity: .82;
+}
+
+.paperVeil {
+  background:
+    linear-gradient(90deg, rgba(5, 5, 5, .88) 0 18%, rgba(5, 5, 5, .42) 34%, transparent 58%),
+    linear-gradient(180deg, rgba(199, 255, 56, .04), rgba(0, 0, 0, .68));
+}
+
+.planOverlay {
+  border-color: rgba(199, 255, 56, .5);
+  background:
+    linear-gradient(rgba(199, 255, 56, .22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(199, 255, 56, .22) 1px, transparent 1px);
+  box-shadow: 0 0 42px rgba(199, 255, 56, .12);
+}
+
+.selectedIndex,
+.selectedInfo,
+.blueprintPreview {
+  border-right-color: var(--line);
+}
+
+.selectedInfo button,
+.authorButton,
+.profileWorks button {
+  color: var(--ink);
+}
+
+.blueprintPreview {
+  background:
+    linear-gradient(rgba(199, 255, 56, .09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(199, 255, 56, .09) 1px, transparent 1px),
+    #090a09;
+}
+
+.blueprintPreview span {
+  border-color: rgba(199, 255, 56, .44);
+}
+
+.identityCard,
+.archiveCard,
+.detailPanel,
+.profilePanel,
+.composePanel,
+.stickyBoard {
+  border-color: var(--line);
+  background: rgba(13, 14, 13, .84);
+}
+
+.sectionNav {
+  border-top-color: var(--line);
+}
+
+.sectionNav button {
+  border-bottom-color: var(--line);
+  color: var(--ink);
+}
+
+.sectionNav button.isActive,
+.sectionNav button:hover {
+  border-color: rgba(199, 255, 56, .54);
+  background: linear-gradient(90deg, rgba(199, 255, 56, .10), transparent 72%);
+}
+
+input,
+select,
+textarea {
+  border-bottom-color: rgba(233, 236, 232, .24);
+  color: var(--ink);
+  caret-color: var(--accent);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(233, 236, 232, .36);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+}
+
+select option {
+  background: #0d0e0d;
+  color: var(--ink);
+}
+
+.showcaseSection {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .018), transparent 30%),
+    rgba(5, 5, 5, .38);
+}
+
+.projectCard {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--line);
+  background: #0e0f0e;
+  color: var(--ink);
+}
+
+.projectCard::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(115deg, transparent 0 42%, rgba(199, 255, 56, .16) 44%, transparent 47%),
+    repeating-linear-gradient(0deg, transparent 0 9px, rgba(255, 255, 255, .025) 9px 10px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-16%);
+  transition:
+    opacity 300ms cubic-bezier(.2, .8, .2, 1),
+    transform 420ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.projectCard:hover,
+.projectCard:focus-visible {
+  border-color: var(--accent);
+  background: #121411;
+  box-shadow: 0 18px 70px rgba(0, 0, 0, .42);
+}
+
+.projectCard:hover::after,
+.projectCard:focus-visible::after {
+  opacity: 1;
+  transform: translateX(14%);
+}
+
+.plateFooter {
+  border-top-color: var(--line);
+}
+
+.portfolioVisual {
+  border-bottom-color: var(--line);
+  background:
+    linear-gradient(rgba(199, 255, 56, .075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(199, 255, 56, .075) 1px, transparent 1px),
+    #161816;
+  background-size: 22px 22px;
+  filter: grayscale(.25);
+}
+
+.portfolioVisual::before {
+  border-color: rgba(233, 236, 232, .48);
+}
+
+.portfolioVisual::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    repeating-linear-gradient(90deg, rgba(199, 255, 56, .18) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, transparent, rgba(255, 59, 84, .18));
+  opacity: 0;
+  mix-blend-mode: screen;
+  clip-path: polygon(0 18%, 100% 8%, 100% 26%, 0 36%);
+  transform: translateY(-18%);
+  transition:
+    opacity 220ms ease,
+    transform 340ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.projectCard:hover .portfolioVisual {
+  background-position: 8px -6px;
+}
+
+.projectCard:hover .portfolioVisual::before {
+  border-color: rgba(199, 255, 56, .84);
+  transform: skew(-2deg) scale(.98);
+}
+
+.projectCard:hover .portfolioVisual::after {
+  opacity: .72;
+  transform: translateY(24%);
+}
+
+.planLine {
+  background: rgba(233, 236, 232, .72);
+}
+
+.lineB {
+  background: rgba(199, 255, 56, .62);
+}
+
+.planBlock {
+  border-color: rgba(233, 236, 232, .42);
+  background: rgba(5, 5, 5, .38);
+}
+
+.planDot {
+  background: var(--danger);
+  box-shadow: 0 0 16px rgba(255, 59, 84, .38);
+}
+
+.projectCard:hover .planBlock {
+  border-color: rgba(199, 255, 56, .58);
+}
+
+.projectCard:hover .planBlock,
+.projectCard:hover .lineA,
+.projectCard:hover .lineB,
+.projectCard:hover .planDot {
+  transform: translate(5px, -4px) scale(1.02);
+}
+
+.visual3,
+.visual4 {
+  background:
+    linear-gradient(135deg, rgba(255, 59, 84, .10), transparent 45%),
+    linear-gradient(rgba(199, 255, 56, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(199, 255, 56, .07) 1px, transparent 1px),
+    #171817;
+  background-size: auto, 22px 22px, 22px 22px;
+}
+
+.approachIntro {
+  background:
+    linear-gradient(135deg, rgba(199, 255, 56, .10), transparent 32%),
+    #050505;
+}
+
+.pathGrid button {
+  border-left-color: var(--line);
+  background: #101110;
+  color: var(--ink);
+}
+
+.pathGrid button:hover {
+  border-color: var(--accent);
+  background: #171a14;
+  color: var(--accent);
+}
+
+.pathGrid svg {
+  color: var(--accent);
+}
+
+.toolbar label {
+  border-color: var(--line);
+  background: rgba(13, 14, 13, .82);
+}
+
+.toolbar label:focus-within {
+  border-color: var(--accent);
+}
+
+.archiveCard:hover,
+.archiveCard.selected {
+  border-color: var(--accent);
+  background: #121411;
+  box-shadow: 0 16px 52px rgba(0, 0, 0, .32);
+}
+
+.deathSnippet,
+.deathReport,
+.privacyWarning,
+.tagRow span {
+  border-color: var(--line);
+  background: rgba(20, 21, 20, .92);
+}
+
+.deathSnippet strong {
+  color: var(--accent);
+}
+
+.deathSnippet span,
+.stickyBoard p {
+  color: #b6bdb5;
+}
+
+.tagRow span {
+  color: #c9d1c8;
+}
+
+.authorButton {
+  border-top-color: var(--line);
+}
+
+.authorButton:hover {
+  background: rgba(199, 255, 56, .08);
+}
+
+.signalList,
+.privacyList {
+  border-color: var(--line);
+}
+
+.signalList div,
+.privacyList div {
+  border-right-color: var(--line);
+}
+
+.composePanel {
+  background:
+    linear-gradient(90deg, transparent 0 22px, rgba(199, 255, 56, .16) 22px 23px, transparent 23px),
+    linear-gradient(180deg, rgba(255, 255, 255, .035), transparent),
+    #0d0e0d;
+}
+
+.privacyWarning.active {
+  border-color: var(--danger);
+  color: #ffd8dd;
+}
+
+.stickyBoard article {
+  border-top-color: var(--line);
+}
+
+.stickyBoard span {
+  color: var(--accent);
+}
+
+@keyframes memorialRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .showcaseSection,
+  .approachBand,
+  .contentColumns {
+    animation: memorialRise both linear;
+    animation-timeline: view();
+    animation-range: entry 5% cover 28%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
